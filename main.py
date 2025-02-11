@@ -1,8 +1,7 @@
-from sqlite3 import connect
-
 import requests
 import datetime
 import smtplib
+import time
 
 MY_LAT= 51.110548
 MY_LNG= 17.025558
@@ -43,12 +42,14 @@ sunset = int(data['results']['sunset'].split('T')[1].split(':')[0])
 
 visible = is_overhead()
 
-if visible:
-    connection = smtplib.SMTP('smtp.gmail.com')
-    connection.starttls()
-    connection.login(user=LOGIN, password=PASSWORD)
-    connection.sendmail(from_addr=LOGIN, to_addrs="example@example.com", msg="Subject:ISS_position\n\n"
-                                                                             "Hello Iss is at your location, look up!")
-    print("sent")
-else:
-    print("not visible")
+while True:
+    if visible:
+        connection = smtplib.SMTP('smtp.gmail.com')
+        connection.starttls()
+        connection.login(user=LOGIN, password=PASSWORD)
+        connection.sendmail(from_addr=LOGIN, to_addrs="example@example.com", msg="Subject:ISS_position\n\n"
+                                                                                 "Hello Iss is at your location, look up!")
+        print("sent")
+    else:
+        print("not visible")
+    time.sleep(60)
