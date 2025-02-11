@@ -5,6 +5,7 @@ MY_LAT= 51.110548
 MY_LNG= 17.025558
 
 
+
 def is_overhead():
     response = requests.get(url="http://api.open-notify.org/iss-now.json")
     response.raise_for_status()
@@ -13,10 +14,14 @@ def is_overhead():
     latitude = float(data['iss_position']['latitude'])
     iss_position = (longitude, latitude)
 
+
     if MY_LAT - 5 <= latitude <= MY_LAT +5 and MY_LNG - 5 <= longitude <= MY_LNG +5:
-        return True
+        if now.hour > sunset or now.hour < sunrise:
+            return True
     else:
         return False
+
+
 
 now = datetime.datetime.now()
 
